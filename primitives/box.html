@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>test a collection of primitives</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+
+	<body>
+		<script src="../js/three.js"></script>
+		<script>
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			const width = 8;  // ui: width
+			const height = 8;  // ui: height
+			const depth = 8;  // ui: depth
+			const widthSegments = 4;  // ui: widthSegments
+			const heightSegments = 4;  // ui: heightSegments
+			const depthSegments = 4;  // ui: depthSegments
+			const geometry = new THREE.BoxGeometry( width, height, depth,
+							  widthSegments, heightSegments, depthSegments);
+			
+			// add the actual box mesh
+			const material = new THREE.MeshStandardMaterial({color: 0x44aa88});
+ 			const cube = new THREE.Mesh(geometry, material);
+  			scene.add(cube);
+
+		
+			// adding the wireframe as a separate geometry	
+			const scale = 1.002;
+			const geometry2 = new THREE.BoxGeometry( width * scale, height * scale, depth * scale,
+							  widthSegments, heightSegments, depthSegments);  
+			const wireframe = new THREE.WireframeGeometry(geometry2);
+			const line = new THREE.LineSegments( wireframe );
+			line.material.depthTest = true;
+			line.material.opacity = 1.0;
+			line.material.transparent = true;
+			scene.add(line);
+
+			
+			
+ 			
+			//adding a light
+			const color = 0xFFFFFF;
+  			const intensity = 1;
+  			const light = new THREE.DirectionalLight(color, intensity);
+  			light.position.set(-1, 2, 4);
+  			scene.add(light);
+
+			camera.position.z = 16;
+			
+			function animate() {
+				requestAnimationFrame( animate );
+
+				cube.rotation.x += 0.001;
+    			cube.rotation.y += 0.001;
+				
+				line.rotation.x += 0.001;
+    			line.rotation.y += 0.001;
+  	
+				renderer.render( scene, camera );
+			};
+
+			animate();
+			
+		</script>
+	</body>
+</html>

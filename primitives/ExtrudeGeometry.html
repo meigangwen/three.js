@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>test a collection of primitives</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+
+	<body>
+		<script src="js/three.js"></script>
+		<script>
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			
+			const shape = new THREE.Shape();
+			const x = -2.5;
+			const y = -5;
+			shape.moveTo(x + 2.5, y + 2.5);
+			shape.bezierCurveTo(x + 2.5, y + 2.5, x + 2, y, x, y);
+			shape.bezierCurveTo(x - 3, y, x - 3, y + 3.5, x - 3, y + 3.5);
+			shape.bezierCurveTo(x - 3, y + 5.5, x - 1.5, y + 7.7, x + 2.5, y + 9.5);
+			shape.bezierCurveTo(x + 6, y + 7.7, x + 8, y + 4.5, x + 8, y + 3.5);
+			shape.bezierCurveTo(x + 8, y + 3.5, x + 8, y, x + 5, y);
+			shape.bezierCurveTo(x + 3.5, y, x + 2.5, y + 2.5, x + 2.5, y + 2.5);
+
+			const extrudeSettings = {
+  				steps: 2,
+  				depth: 2,  
+  				bevelEnabled: true,  
+  				bevelThickness: 1,  
+  				bevelSize: 1,  
+  				bevelSegments: 2,  
+			};
+
+			const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+			const material = new THREE.MeshStandardMaterial({color: 0x44aa88});
+ 			const cube = new THREE.Mesh(geometry, material);
+  			scene.add(cube);
+			
+			
+
+
+			
+			// adding the wireframe as a separate geometry	
+			
+			const wireframe = new THREE.WireframeGeometry(geometry);
+			const line = new THREE.LineSegments( wireframe );
+			line.material.depthTest = true;
+			line.material.opacity = 1.0;
+			line.material.transparent = true;
+			scene.add(line);
+			
+			
+			
+ 			
+			//adding a light
+			const color = 0xFFFFFF;
+  			const intensity = 1;
+  			const light = new THREE.DirectionalLight(color, intensity);
+  			light.position.set(-1, 2, 4);
+  			scene.add(light);
+
+			camera.position.z = 16;
+			
+			function animate() {
+				requestAnimationFrame( animate );
+
+				cube.rotation.x += 0.001;
+    			cube.rotation.y += 0.001;
+				
+				line.rotation.x += 0.001;
+    			line.rotation.y += 0.001;
+  	
+				renderer.render( scene, camera );
+			};
+
+			animate();
+			
+		</script>
+	</body>
+</html>
