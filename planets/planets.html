@@ -11,6 +11,9 @@
 
 	<body>
 		<script src="js/three.js"></script>
+		<script type="module">
+			import GUI from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm';
+		</script>
 		<script>
 			const scene = new THREE.Scene();
 			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -74,33 +77,8 @@
   			//light.position.set(-1, 2, 4);
   			scene.add(light);
 
-
-			//adding a helper for each objects
-			function makeAxisGrid(node, label, units) {
-  				const helper = new AxisGridHelper(node, units);
-  				gui.add(helper, 'visible').name(label);
-			}
- 
-			makeAxisGrid(solarSystem, 'solarSystem', 25);
-			makeAxisGrid(sunMesh, 'sunMesh');
-			makeAxisGrid(earthOrbit, 'earthOrbit');
-			makeAxisGrid(earthMesh, 'earthMesh');
-			makeAxisGrid(moonOrbit, 'moonOrbit');
-			makeAxisGrid(moonMesh, 'moonMesh');
-
 			
-			function animate(time) {
-				requestAnimationFrame( animate );
-				
-				objects.forEach((obj) => {
-  					obj.rotation.y = time * 0.001;
-				});
-				renderer.render( scene, camera );
-			};
-
-			animate();
-
-			/*
+			//adding a helper for each objects
 			class AxisGridHelper {
 				constructor(node, units = 10) {
 					const axes = new THREE.AxesHelper();
@@ -126,7 +104,34 @@
 					this.axes.visible = v;
 				}
 			}
+			
+			const gui = new GUI();
+			/*
+			function makeAxisGrid(node, label, units) {
+  				const helper = new AxisGridHelper(node, units);
+  				gui.add(helper, 'visible').name(label);
+			}
+ 
+			
+			makeAxisGrid(solarSystem, 'solarSystem', 25);
+			makeAxisGrid(sunMesh, 'sunMesh');
+			makeAxisGrid(earthOrbit, 'earthOrbit');
+			makeAxisGrid(earthMesh, 'earthMesh');
+			makeAxisGrid(moonOrbit, 'moonOrbit');
+			makeAxisGrid(moonMesh, 'moonMesh');
 			*/
+			
+			function animate(time) {
+				requestAnimationFrame( animate );
+				
+				objects.forEach((obj) => {
+  					obj.rotation.y = time * 0.001;
+				});
+				renderer.render( scene, camera );
+			};
+
+			animate();
+
 		</script>
 	</body>
 </html>
